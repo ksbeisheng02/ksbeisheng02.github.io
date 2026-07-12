@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>文件列表</title>
+    <title>废墟文件站</title>
     <style>
         * {
             margin: 0;
@@ -11,108 +11,234 @@
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #f5f7fa;
+            font-family: "Courier New", Courier, monospace;
+            background: #c4b59a;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            background-image: 
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px),
+                radial-gradient(circle at 10% 20%, #d4c5a6, #b8a88a);
         }
         .container {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            padding: 32px 28px;
+            background: #d6c8ae;
+            border: 4px solid #5a4d3a;
+            border-style: solid dashed solid dashed;
+            border-radius: 12px 4px 12px 4px;
+            box-shadow: 
+                8px 8px 0 rgba(0,0,0,0.2),
+                inset 0 0 30px rgba(0,0,0,0.1),
+                0 0 0 2px #8a7a62,
+                0 0 0 6px #b8a88a;
+            padding: 28px 24px;
             max-width: 720px;
             width: 100%;
+            position: relative;
+            transform: rotate(0.2deg);
+        }
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 8px;
+            left: 20px;
+            right: 20px;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #7a6a52 0px, #7a6a52 4px, transparent 4px, transparent 8px);
+            opacity: 0.3;
+        }
+        .container::after {
+            content: "⛑️";
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 24px;
+            opacity: 0.3;
+            transform: rotate(15deg);
         }
         h1 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #1a2332;
-            margin-bottom: 6px;
+            font-size: 26px;
+            font-weight: 700;
+            color: #3d3428;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            font-family: "Courier New", monospace;
+        }
+        h1::before {
+            content: "☢️ ";
+            font-size: 22px;
         }
         .sub {
-            color: #6b7a8f;
+            color: #5a4d3a;
             font-size: 14px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid #eef2f6;
-            padding-bottom: 16px;
+            margin-bottom: 20px;
+            border-bottom: 3px double #7a6a52;
+            padding-bottom: 14px;
+            font-family: "Courier New", monospace;
+            letter-spacing: 1px;
+        }
+        .sub::after {
+            content: " ⚡";
+            color: #8a2a1a;
         }
         .file-list {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
         .file-item {
             display: flex;
             align-items: center;
-            padding: 10px 14px;
-            border-radius: 10px;
-            transition: background 0.15s;
+            padding: 8px 12px;
+            border: 1px solid #8a7a62;
+            border-radius: 2px;
             text-decoration: none;
-            color: #1a2332;
+            color: #2d2418;
+            background: rgba(200, 185, 160, 0.4);
+            transition: all 0.1s ease;
+            position: relative;
+            font-family: "Courier New", monospace;
+            font-size: 14px;
         }
         .file-item:hover {
-            background: #f0f4fe;
+            background: #b8a080;
+            border-color: #3d3428;
+            transform: scale(1.01);
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+        }
+        .file-item:nth-child(odd) {
+            background: rgba(180, 165, 140, 0.3);
+        }
+        .file-item:nth-child(even) {
+            background: rgba(210, 195, 175, 0.3);
         }
         .file-icon {
             font-size: 18px;
-            margin-right: 14px;
-            opacity: 0.7;
-            width: 24px;
+            margin-right: 12px;
+            opacity: 0.8;
+            width: 26px;
             text-align: center;
+            filter: grayscale(0.15);
         }
         .file-name {
-            font-size: 15px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 600;
             flex: 1;
             word-break: break-all;
+            color: #2d2418;
         }
         .file-size {
-            font-size: 13px;
-            color: #8b9aaf;
-            margin-left: 12px;
+            font-size: 12px;
+            color: #5a4d3a;
+            margin-left: 10px;
             white-space: nowrap;
+            background: rgba(0,0,0,0.05);
+            padding: 0 6px;
+            border: 1px solid #8a7a62;
+            border-radius: 2px;
         }
         .download-badge {
-            font-size: 13px;
-            color: #3b6eff;
+            font-size: 14px;
+            color: #6a3a1a;
             margin-left: 10px;
-            font-weight: 500;
+            font-weight: 700;
+            opacity: 0.7;
+        }
+        .download-badge::before {
+            content: "⬇";
+            margin-right: 2px;
+        }
+        .release-tag {
+            background: #5a4d3a;
+            color: #d6c8ae;
+            padding: 0 10px;
+            border-radius: 2px;
+            font-size: 11px;
+            margin-right: 10px;
+            white-space: nowrap;
+            font-family: "Courier New", monospace;
+            letter-spacing: 0.5px;
+            border: 1px solid #3d3428;
         }
         .empty {
             text-align: center;
-            padding: 40px 0;
-            color: #8b9aaf;
+            padding: 30px 0;
+            color: #5a4d3a;
+            font-family: "Courier New", monospace;
+            border: 2px dashed #7a6a52;
         }
         .loading {
             text-align: center;
-            padding: 40px 0;
-            color: #6b7a8f;
+            padding: 30px 0;
+            color: #5a4d3a;
+            font-family: "Courier New", monospace;
+        }
+        .loading::after {
+            content: " ...";
+            animation: dots 1.5s steps(4) infinite;
+        }
+        @keyframes dots {
+            0% { content: " ..."; }
+            25% { content: " ...."; }
+            50% { content: " ....."; }
+            75% { content: " ......"; }
         }
         .footer {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid #eef2f6;
-            font-size: 13px;
-            color: #8b9aaf;
+            margin-top: 22px;
+            padding-top: 14px;
+            border-top: 3px double #7a6a52;
+            font-size: 12px;
+            color: #5a4d3a;
             text-align: center;
+            font-family: "Courier New", monospace;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        .footer::before {
+            content: "⚙️ ";
+        }
+        .footer::after {
+            content: " ☭";
+            opacity: 0.3;
         }
         @media (max-width: 480px) {
-            .container { padding: 20px 16px; }
-            .file-item { padding: 8px 10px; }
+            .container { padding: 16px 12px; }
+            .file-item { padding: 6px 8px; flex-wrap: wrap; }
             .file-size { display: none; }
+            .release-tag { font-size: 10px; padding: 0 6px; }
+            h1 { font-size: 20px; }
+        }
+        /* 战损做旧小点缀 */
+        .scratch {
+            position: absolute;
+            background: rgba(0,0,0,0.05);
+            height: 1px;
+            width: 60%;
+            left: 10%;
+            top: 30%;
+            transform: rotate(-2deg);
+        }
+        .scratch2 {
+            position: absolute;
+            background: rgba(0,0,0,0.04);
+            height: 1px;
+            width: 40%;
+            right: 15%;
+            bottom: 25%;
+            transform: rotate(3deg);
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>📁 文件列表</h1>
-    <div class="sub">点击文件名即可下载</div>
-    <div class="file-list" id="fileList">
-        <div class="loading">⏳ 加载中...</div>
+    <div class="scratch"></div>
+    <div class="scratch2"></div>
+    <h1>文件废墟</h1>
+    <div class="sub">点击即可下载 · 所有版本皆可寻</div>
+    <div id="downloadList">
+        <div class="loading">⏳ 加载中</div>
     </div>
     <div class="footer">由 GitHub 部署驱动</div>
 </div>
@@ -120,81 +246,150 @@
     const REPO = "ksbeisheng02/ksbeisheng02.github.io";
     const FOLDER = "";
     const BRANCH = "master";
+    const listEl = document.getElementById("downloadList");
 
-    const fileListEl = document.getElementById("fileList");
+    function getFileIcon(fileName) {
+        const ext = fileName.split('.').pop().toLowerCase();
+        
+        const audioFormats = [
+            'mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a', 'opus', 'wma',
+            'alac', 'ape', 'dsd', 'dff', 'dsf', 'mid', 'midi', 'kar',
+            'mod', 'xm', 'it', 's3m', 'mtm', 'umx', 'amr', 'awb',
+            'mpc', 'mpp', 'oga', 'omg', 'ra', 'rm', 'tta', 'voc',
+            'vox', 'wv', '8svx', 'snd', 'au', 'aiff', 'aif', 'aifc',
+            'cda', 'dts', 'mlp', 'ac3', 'eac3', 'thd', 'truehd'
+        ];
+        
+        const archiveFormats = [
+            'zip', 'rar', '7z', 'gz', 'tar', 'bz2', 'xz', 'zst', 'lzma', 'cab', 'arj',
+            'ace', 'lzh', 'lha', 'z', 'taz', 'tgz', 'tbz', 'tbz2', 'tz', 'tlz',
+            'txz', 'tzst', 'lz', 'lzo', 'lz4', 'lz5', 'lz77', 'lzma2', 'lzma-alone',
+            's7z', 'wim', 'swm', 'esd', 'msu', 'msp', 'msi', 'appx', 'appxbundle'
+        ];
+        
+        const textFormats = [
+            'txt', 'log', 'md', 'json', 'xml', 'yaml', 'yml', 'toml', 'ini', 'cfg', 'conf', 
+            'csv', 'tsv', 'properties', 'env', 'gitignore', 'editorconfig', 'eslintrc',
+            'prettierrc', 'babelrc', 'npmrc', 'yarnrc', 'lock', 'config', 'settings',
+            'sql', 'php', 'py', 'js', 'ts', 'jsx', 'tsx', 'vue', 'svelte', 'go', 'rs',
+            'c', 'cpp', 'h', 'hpp', 'cs', 'java', 'kt', 'kts', 'scala', 'rb', 'pl',
+            'pm', 'lua', 'r', 'dart', 'groovy', 'gradle', 'tf', 'hcl', 'dockerfile',
+            'cmake', 'make', 'makefile', 'sh', 'bash', 'zsh', 'fish', 'ps1', 'bat',
+            'cmd', 'awk', 'sed', 'perl', 'pod', 'swift', 'clj', 'cljs', 'edn',
+            'nim', 'cr', 'zig', 'v', 'pony', 'hx', 'm', 'mm'
+        ];
 
-    async function fetchFiles() {
-        const apiUrl = `https://api.github.com/repos/${REPO}/contents/${FOLDER}?ref=${BRANCH}`;
-
-        try {
-            const resp = await fetch(apiUrl);
-
-            if (!resp.ok) {
-                if (resp.status === 404) {
-                    throw new Error("仓库或目录不存在，请检查 REPO 和 FOLDER 配置是否正确");
-                }
-                if (resp.status === 403) {
-                    throw new Error("API 访问受限（可能达到频率限制），请稍后再试");
-                }
-                throw new Error(`请求失败 (HTTP ${resp.status})`);
-            }
-
-            const data = await resp.json();
-
-            if (!Array.isArray(data)) {
-                throw new Error("返回的数据格式异常");
-            }
-
-            const files = data.filter(item => item.type === "file");
-
-            if (files.length === 0) {
-                fileListEl.innerHTML = `<div class="empty">📭 当前目录下没有文件</div>`;
-                return;
-            }
-
-            files.sort((a, b) => a.name.localeCompare(b.name));
-
-            let html = "";
-            files.forEach(file => {
-                const ext = file.name.split('.').pop().toLowerCase();
-                let icon = "📄";
-                if (["pdf"].includes(ext)) icon = "📕";
-                else if (["zip", "rar", "7z", "gz"].includes(ext)) icon = "📦";
-                else if (["mp4", "avi", "mkv", "mov"].includes(ext)) icon = "🎬";
-                else if (["mp3", "wav", "flac"].includes(ext)) icon = "🎵";
-                else if (["exe", "msi", "dmg", "pkg"].includes(ext)) icon = "⚙️";
-                else if (["txt", "log", "md"].includes(ext)) icon = "📃";
-                else if (["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(ext)) icon = "🖼️";
-                else if (["doc", "docx"].includes(ext)) icon = "📘";
-                else if (["xls", "xlsx"].includes(ext)) icon = "📊";
-                else if (["ppt", "pptx"].includes(ext)) icon = "📙";
-
-                const size = file.size;
-                let sizeStr = "";
-                if (size < 1024) sizeStr = size + " B";
-                else if (size < 1024 * 1024) sizeStr = (size / 1024).toFixed(1) + " KB";
-                else sizeStr = (size / 1024 / 1024).toFixed(1) + " MB";
-
-                const downloadUrl = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${file.path}`;
-
-                html += `
-                    <a class="file-item" href="${downloadUrl}" download target="_blank">
-                        <span class="file-icon">${icon}</span>
-                        <span class="file-name">${file.name}</span>
-                        <span class="file-size">${sizeStr}</span>
-                        <span class="download-badge">⬇️</span>
-                    </a>
-                `;
-            });
-
-            fileListEl.innerHTML = html;
-        } catch (error) {
-            fileListEl.innerHTML = `<div class="empty">❌ ${error.message}</div>`;
-            console.error("加载文件列表失败:", error);
-        }
+        if (audioFormats.includes(ext)) return "🎵";
+        if (archiveFormats.includes(ext)) return "📦";
+        if (textFormats.includes(ext)) return "📃";
+        
+        const videoFormats = ['mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', 'm4v', 'mpg', 'mpeg', '3gp', 'ogv', 'ts', 'm2ts', 'mts'];
+        if (videoFormats.includes(ext)) return "🎬";
+        
+        const imageFormats = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'tiff', 'tif', 'heic', 'heif', 'raw', 'cr2', 'nef', 'arw'];
+        if (imageFormats.includes(ext)) return "🖼️";
+        
+        const docFormats = ['pdf', 'doc', 'docx', 'odt', 'rtf', 'tex', 'dvi'];
+        if (docFormats.includes(ext)) return "📕";
+        
+        const excelFormats = ['xls', 'xlsx', 'ods', 'csv', 'tsv'];
+        if (excelFormats.includes(ext)) return "📊";
+        
+        const pptFormats = ['ppt', 'pptx', 'odp', 'key'];
+        if (pptFormats.includes(ext)) return "📙";
+        
+        const exeFormats = ['exe', 'msi', 'dmg', 'pkg', 'deb', 'rpm', 'appimage', 'flatpak', 'snap', 'run', 'sh', 'bash'];
+        if (exeFormats.includes(ext)) return "⚙️";
+        
+        const apkFormats = ['apk', 'ipa', 'xapk', 'apks', 'aab'];
+        if (apkFormats.includes(ext)) return "📱";
+        
+        return "📄";
     }
 
-    fetchFiles();
+    function formatSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+        if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(1) + " MB";
+        return (bytes / 1024 / 1024 / 1024).toFixed(2) + " GB";
+    }
+
+    function renderItems(items) {
+        if (items.length === 0) {
+            listEl.innerHTML = `<div class="empty">📭 废墟中空无一物</div>`;
+            return;
+        }
+        let html = "";
+        items.forEach(item => {
+            const icon = getFileIcon(item.name);
+            const sizeStr = item.size ? formatSize(item.size) : "";
+            html += `
+                <a class="file-item" href="${item.url}" download target="_blank">
+                    <span class="file-icon">${icon}</span>
+                    <span class="file-name">${item.name}</span>
+                    ${item.tag ? `<span class="release-tag">${item.tag}</span>` : ""}
+                    <span class="file-size">${sizeStr}</span>
+                    <span class="download-badge"></span>
+                </a>
+            `;
+        });
+        listEl.innerHTML = html;
+    }
+
+    async function fetchAll() {
+        const fileItems = [];
+        try {
+            const fileUrl = `https://api.github.com/repos/${REPO}/contents/${FOLDER}?ref=${BRANCH}`;
+            const fileResp = await fetch(fileUrl);
+            if (fileResp.ok) {
+                const data = await fileResp.json();
+                if (Array.isArray(data)) {
+                    data.filter(f => f.type === "file").forEach(f => {
+                        fileItems.push({
+                            name: f.name,
+                            size: f.size,
+                            url: `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${f.path}`,
+                            tag: ""
+                        });
+                    });
+                }
+            }
+        } catch (e) {
+            console.warn("加载文件列表失败:", e);
+        }
+
+        try {
+            const releaseUrl = `https://api.github.com/repos/${REPO}/releases`;
+            const releaseResp = await fetch(releaseUrl);
+            if (releaseResp.ok) {
+                const releases = await releaseResp.json();
+                releases.forEach(r => {
+                    if (r.assets && r.assets.length > 0) {
+                        r.assets.forEach(asset => {
+                            fileItems.push({
+                                name: asset.name,
+                                size: asset.size,
+                                url: asset.browser_download_url,
+                                tag: r.tag_name
+                            });
+                        });
+                    }
+                });
+            }
+        } catch (e) {
+            console.warn("加载 Releases 失败:", e);
+        }
+
+        if (fileItems.length === 0) {
+            listEl.innerHTML = `<div class="empty">📭 废墟中空无一物</div>`;
+            return;
+        }
+
+        fileItems.sort((a, b) => a.name.localeCompare(b.name));
+        renderItems(fileItems);
+    }
+
+    fetchAll();
 </script>
 </body>
 </html>
